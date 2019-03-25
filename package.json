@@ -1,0 +1,161 @@
+{
+  "name": "new-nitro",
+  "version": "0.0.0",
+  "description": "Nitro is a Node.js application for simple and complex frontend development with a tiny footprint. This app is based on generator-nitro 4.5.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "author": "The Nitro Team",
+  "engines": {
+    "node": ">=8 <11",
+    "npm": ">=5.2 <7"
+  },
+  "scripts": {
+    "\n# PROJECT ------- ": "",
+    "clean": "npx npm-run-all clean:*",
+    "clean:lock": "rimraf package-lock.json",
+    "clean:modules": "npx rimraf node_modules",
+    "commit": "git-cz",
+    "nitro:pattern": "yo nitro:pattern",
+    "nitro:update": "npm uninstall generator-nitro && npm install generator-nitro@latest --save-dev --save-exact && yo nitro",
+    "\n# LINT/TEST ------- ": "",
+    "cypress-test": "npm run build && cross-env PORT=8888 npm-run-all --parallel --race test:cypress:serve cypress-test:open",
+    "cypress-test:open": "cypress open --project ./tests/cypress/",
+    "lint": "npm-run-all lint:*",
+    "lint:accessibility": "gulp lint-accessibility",
+    "lint:css": "stylelint src/**/*.*ss",
+    "lint:data": "nitro-app-validate-pattern-data",
+    "lint:html": "gulp lint-html",
+    "lint:js": "eslint ./src",
+    "lint:license": "license-checker --production --summary --exclude \"Apache-2.0, BSD, ISC, LGPL, MIT, MPL\" --failOn \"AGPL; EPL; GPL\"",
+    "lint:ts": "tslint 'src/**/*.{ts,tsx}'",
+    "prettier": "prettier --write \"**/*.*(js|jsx|ts|tsx|json)\"",
+    "test": "npm-run-all test:*",
+    "test:lint": "npm run lint",
+    "test:karma": "karma start ./tests/karma/karma.conf.js",
+    "test:cypress": "npm run build && cross-env PORT=8888 npm-run-all --parallel --race test:cypress:*",
+    "test:cypress:serve": "npm run prod:serve",
+    "test:cypress:test": "cypress run --project ./tests/cypress/",
+    "visual-approve": "gulp visual-approve",
+    "visual-reference": "npm run build && gulp visual-reference",
+    "visual-test": "npm run build && gulp visual-test",
+    "\n# BUILD/RELEASE ------- ": "",
+    "build": "npm-run-all build:*",
+    "build:clean": "rimraf public/assets",
+    "build:assets": "gulp assets",
+    "build:webpack": "webpack --mode production --config config/webpack/webpack.config.prod.js",
+    "\n# RUN ------- ": "",
+    "dev": "npm-run-all --parallel --race dev:*",
+    "dev:serve": "cross-env NODE_ENV=development nitro-app-serve",
+    "dev:watch": "gulp develop",
+    "prod": "npm-run-all prod:*",
+    "prod:build": "npm run build",
+    "prod:serve": "cross-env NODE_ENV=production nitro-app-serve",
+    "start": "npm-run-all start:*",
+    "start:dev": "npm run dev",
+    "\n# DOCKER ------- ": "",
+    "docker:update": "docker-compose build",
+    "docker:start": "npm run docker:dev:start",
+    "docker:dev:start": "docker-compose -f docker-compose-dev.yml up",
+    "docker:dev:console": "docker exec -it new-nitro_server-dev bash",
+    "docker:dev:watch": "docker-volume-watcher -e \"*.git*\" \"*build*\" \"*dist*\"",
+    "docker:prod": "docker-compose up"
+  },
+  "keywords": [
+    "frontend",
+    "app",
+    "nitro",
+    "component",
+    "pattern",
+    "modular"
+  ],
+  "dependencies": {
+    "@babel/polyfill": "7.2.5",
+    "@gondel/core": "0.0.8",
+    "@gondel/plugin-hot": "0.0.8",
+    "bootstrap": "4.3.1",
+    "flatpickr": "4.5.7",
+    "handlebars": "4.1.1",
+    "jquery": "3.3.1",
+    "lazysizes": "4.1.6",
+    "lodash": "4.17.11",
+    "lottie-web": "5.4.4",
+    "prevent-window-opener-attacks": "0.2.4",
+    "svg4everybody": "2.1.9",
+    "terrific": "3.0.0",
+    "tota11y": "0.1.6"
+  },
+  "devDependencies": {
+    "@namics/eslint-config": "6.1.0",
+    "@namics/prettier-config": "0.2.0",
+    "@namics/stylelint-config": "0.2.1",
+    "@namics/tslint-config": "0.2.0",
+    "@nitro/app": "4.5.0",
+    "@nitro/exporter": "4.5.0",
+    "@nitro/gulp": "4.5.0",
+    "@nitro/webpack": "4.5.0",
+    "commitizen": "3.0.7",
+    "config": "3.0.1",
+    "cross-env": "5.2.0",
+    "cypress": "3.2.0",
+    "cz-conventional-changelog": "2.1.0",
+    "eslint": "5.15.3",
+    "eslint-plugin-import": "2.16.0",
+    "extend": "3.0.2",
+    "generator-nitro": "4.5.0",
+    "gulp": "3.9.1",
+    "gulp-load-plugins": "1.5.0",
+    "husky": "1.3.1",
+    "jasmine-core": "3.3.0",
+    "karma": "4.0.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-jasmine": "2.0.1",
+    "karma-phantomjs-launcher": "1.0.4",
+    "karma-webpack": "3.0.5",
+    "license-checker": "25.0.1",
+    "lint-staged": "8.1.5",
+    "npm-run-all": "4.1.5",
+    "prettier": "1.15.2",
+    "rimraf": "2.6.3",
+    "stylelint": "9.10.1",
+    "tslint": "5.13.1",
+    "tslint-config-prettier": "1.18.0",
+    "webpack": "4.29.5",
+    "webpack-cli": "3.3.0",
+    "yo": "2.0.5"
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "ie 11",
+    "android 4",
+    "Firefox ESR"
+  ],
+  "postcss": {},
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{css|scss}": [
+      "stylelint"
+    ],
+    "src/**/*.json": [
+      "prettier --list-different --write",
+      "npm run lint:data"
+    ],
+    "src/**/*.{js,jsx}": [
+      "prettier --list-different --write",
+      "eslint"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "prettier --list-different --write",
+      "tslint"
+    ]
+  }
+}

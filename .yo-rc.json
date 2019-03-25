@@ -1,0 +1,15 @@
+{
+  "generator-nitro": {
+    "promptValues": {
+      "templateEngine": "hbs",
+      "clientTpl": false,
+      "exampleCode": true,
+      "exporter": false
+    },
+    "name": "new-nitro",
+    "templateEngine": "hbs",
+    "clientTemplates": false,
+    "exampleCode": true,
+    "exporter": false
+  }
+}
