@@ -1,0 +1,9 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Todo App",
+	"description": "A Todo App molecule",
+	"type": "object",
+	"properties": {},
+	"required": [],
+	"dependencies": {}
+}
