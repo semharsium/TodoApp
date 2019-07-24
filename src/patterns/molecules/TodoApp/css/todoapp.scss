@@ -1,3 +1,115 @@
 .m-todo-app {
+  display: flex;
+  flex-flow: nowrap column;
+  &__header {
+    width: 100%;
+  }
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
 
+}
+.content {
+  position: relative;
+  display: none;
+  width: 237px;
+  padding: 20px;
+  height: auto;
+  justify-content: center;
+  z-index: 1;
+  margin: auto;
+  color: white;
+  background-color: #3a405a;
+  transition: all 0.2s ease-in-out;
+  transform: scale(0.8);
+}
+.overlay {
+  background-color: #0b0b0b;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  opacity: 0.8;
+  display: none;
+}
+.active {
+  display: inline-block;
+  transform: scale(1);
+}
+
+.todo-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.todo__importance {
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.lbl {
+  position: absolute;
+}
+
+.importance-span {
+  display: inline-block;
+  position: relative;
+  margin-right: 13px;
+}
+
+.importance .importance-span {
+  cursor: pointer;
+}
+
+.importance-span:first-child {
+  margin-right: -15px;
+}
+
+.importance-span::after {
+  content: "\2606";
+  -webkit-font-smoothing: antialiased;
+}
+
+.importance-span.active:before,
+.importance .importance-span:hover:before,
+.importance .importance-span:hover ~ .importance-span:before {
+  position: absolute;
+  content: "\2605";
+  color:#99b2dd;
+  -webkit-font-smoothing: antialiased;
+}
+
+.todos__item {
+  display: flex;
+  flex-flow: raw wrap;
+  margin-bottom: 20px;
+  border-bottom: 1px solid black;
+  align-items: center;
+}
+
+.item {
+  margin-bottom: 20px;
+  width: calc(50% - 14px)
+}
+
+.item-importance {
+  margin-left: 80px;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: -3px;
+}
+
+.item.item-importance .importance-span::after {
+  content: '\2605';
+  color: #99b2dd;
+  -webkit-font-smoothing: antialiased;
+  display: none;
+}
+.btn {
+  height: 40px;
+  background: #f9dec9;
 }

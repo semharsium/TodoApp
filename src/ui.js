@@ -25,7 +25,7 @@ import './patterns/atoms/list';
 import './patterns/atoms/loader';
 import './patterns/atoms/lottie';
 import './patterns/atoms/stage';
-import './patterns/molecules/example';
+import './patterns/molecules/TodoApp';
 
 hot(module);
 

@@ -1,3 +1,80 @@
 <div class="m-todo-app" data-t-name="TodoApp">
+    <div class="m-todo-app__header">
+        <div class="m-todo-app__toolbar">
+            <div class="m-todo-app__toolbar-button">
+                <button class="btn js-show-create-form">Create new note</button>
+            </div>
+        </div>
+        {{!-- <div class="m-todo-app__filter">
+            <button class="btn js-filter" data-filter="byFinish">By finish Date</button>
+            <button class="btn js-filter" data-filter="byCreated">By created Date</button>
+            <button class="btn js-filter" data-filter="byImportance">By Importance</button>
+            <button class="btn js-filter" data-filter="showFinished">Show finished</button>
+        </div> --}}
+    </div>
+    <div class="content js-todo-content">
 
+        <form class="todo__time todo-item">
+            <div class="todo__title todo-item js-odo-item">
+                <input type="text"  class="ipt js-item-name" value="" placeholder="Name">
+            </div>
+
+            <div class="todo__description todo-item">
+                <textarea class="ipt js-item-description" value="" placeholder="Description"></textarea>
+            </div>
+
+            <div class="todo__importance todo-item">
+                <label class="lbl" >Importance:</label>
+                <div class="importance item-importance js-item-importance">
+                    <span class="importance-span js-importance-span" name ="rating" data-value="5">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="4">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="3">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="2">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="1">
+                    </span>
+                </div>
+            </div>
+
+            <input class="ipt js-item-time" type ="date" value="" placeholder="Date">
+            <button class="btn js-btn">submit</button>
+            <button class="btn js-close-button">Close</button>
+        </form>
+
+    </div>
+    <div class="todos">
+        <div class="todos__item"> 
+            <div class="item">
+                <div class="item item-time js-time"></div>
+                <div class="item item-finished">
+                    <input type="checkbox" name="finished" class="js-finished-checkbox" value="">
+                    <label for ="finished">finished</label>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item item-title js-item-title"></div>
+                <div class="item item-description js-description">todoDescription</div>
+            </div>
+            <div class="item">
+                <div class="item item-importance js-importance">
+                    <span class="importance-span js-importance-span" name ="rating" data-value="5">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="4">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="3">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="2">
+                    </span>
+                    <span class="importance-span js-importance-span" name ="rating" data-value="1">
+                    </span>
+                </div>
+                <button class="btn item item-edit js-item-edit">Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay js-overlay"></div>
 </div>

@@ -4,6 +4,5 @@
 	"description": "A Todo App molecule",
 	"type": "object",
 	"properties": {},
-	"required": [],
 	"dependencies": {}
 }
