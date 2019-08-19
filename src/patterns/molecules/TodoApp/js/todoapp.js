@@ -15,7 +15,7 @@ const selectors = {
 	appContainer: '.js-todo-content',
 	overlay: '.js-overlay',
 	closeButton: '.js-close-button',
-	btn: '.js-btn',
+	submit: '.js-submit',
 	itemTime: '.js-item-time',
 	time: '.js-time',
 	itemName: '.js-item-name',
@@ -24,6 +24,10 @@ const selectors = {
 	description: '.js-description',
 	finishedCheckbox: '.js-finished-checkbox',
 	itemEdit: '.js-item-edit',
+	importanceItem: '.js-item-importance',
+	notesContainer: '.js-notes__container',
+	todosItem: '.js-todos__item',
+	updateBtn: '.js-update',
 	importanceSpan: '.js-importance-span',
 	importance: '.js-importance',
 };
@@ -36,29 +40,26 @@ T.Module.TodoApp = T.createModule({
 		const $appContainer = $ctx.find(selectors.appContainer);
 		const $overlay = $ctx.find(selectors.overlay);
 		const $closeButton = $ctx.find(selectors.closeButton);
-		const $btn = $ctx.find(selectors.btn);
+		const $submit = $ctx.find(selectors.submit);
 		const $itemTime = $ctx.find(selectors.itemTime);
-		const $time = $ctx.find(selectors.time);
+		const $updateBtn = $ctx.find(selectors.updateBtn);
 		const $itemName = $ctx.find(selectors.itemName);
-		const $itemTitle = $ctx.find(selectors.itemTitle);
 		const $itemDescription = $ctx.find(selectors.itemDescription);
-		const $description = $ctx.find(selectors.description);
-		const $finishedCheckbox = $ctx.find(selectors.finishedCheckbox);
-		const $itemEdit = $ctx.find(selectors.itemEdit);
+		const $importanceItem = $ctx.find(selectors.importanceItem);
 		const $importanceSpan = $ctx.find(selectors.importanceSpan);
-		//const $importance = $ctx.find(selectors.importance);
-		const typeNametext = `text-${$ctx.data('t-id')}`; //save the text in typeNametext
+		const $notesContainer = $ctx.find(selectors.notesContainer);
+		const notes = JSON.parse(localStorage.getItem('notes') || '[]'); // notes are like the users, to get the array
 
-		//save the value on local server, can use the type or name of the input
-		$time.text(localStorage.getItem('date'));
-		$itemTitle.text(localStorage.getItem(typeNametext));
-		// $itemTitle.text(localStorage.getItem( 'text-' + $ctx.data('t-id')));
-		$description.text(localStorage.getItem('textarea'));
-		$finishedCheckbox.prop('checked', localStorage.getItem('finished'));
+		this.displayNotes(notes, $notesContainer);
+
+		if (localStorage.getItem('idCount') === null) {
+			localStorage.setItem('idCount', 1);
+		}
 
 		$createFormBtn.on('click', () => {
 			$appContainer.addClass('active');
 			$overlay.addClass('active');
+			$submit.addClass('active');
 		});
 
 		$closeButton.on('click', () => {
@@ -71,79 +72,122 @@ T.Module.TodoApp = T.createModule({
 			$overlay.removeClass('active');
 		});
 
-		$btn.on('click', (event) => {
-			event.preventDefault();
+		//const $time = $ctx.find(selectors.time);
+		//const $itemTitle = $ctx.find(selectors.itemTitle);
+		//const $description = $ctx.find(selectors.description);
 
-			const timeValue = $itemTime.val();
+		const $finishedCheckbox = $ctx.find(selectors.finishedCheckbox);
+		$submit.on('click', (e) => {
+			e.preventDefault();
+
 			const nameValue = $itemName.val();
 			const descriptionValue = $itemDescription.val();
-			const importanceValue = $importanceSpan.val();
+			const importanceValue = $importanceItem.attr('data-importance');
+			const timeValue = $itemTime.val();
 
 			if (!timeValue || !nameValue || !descriptionValue) {
 				// eslint-disable-next-line no-alert
 				alert('Bitte alle Felder ausfüllen');
 			} else {
-				localStorage.setItem('date', timeValue);
-				localStorage.setItem('textarea', descriptionValue);
-				localStorage.setItem(typeNametext, nameValue);
-				localStorage.setItem('rating', importanceValue);
+				//notes[0].name = nameValue;
+				const idCount = localStorage.getItem('idCount');
+				const note = {
+					id: idCount,
+					date: timeValue,
+					description: descriptionValue,
+					name: nameValue,
+					rating: importanceValue,
+				};
+				localStorage.setItem('idCount', Number(idCount) + 1);
+				notes.push(note); //to add a user to the array
+				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
 
-				$time.text(timeValue);
-				$itemTitle.text(nameValue);
-				$description.text(descriptionValue);
+				//$time.text(timeValue);
+				//$itemTitle.text(nameValue);
+				//$description.text(descriptionValue);
 
 				$appContainer.removeClass('active');
 				$overlay.removeClass('active');
+				this.displayNotes(notes, $notesContainer);
 			}
 		});
 
-		$itemName.on('change', (event) => {
-			localStorage.setItem(typeNametext, $(event.target).val()); //$(event.target) means $itemName,typeNametext= `text-${$ctx.data('t-id')}`
-		});
+		$updateBtn.on('click', (e) => {
+			e.preventDefault();
 
-		$itemDescription.on('change', (event) => {
-			localStorage.setItem('textarea', $(event.target).val());
-		});
+			const timeValue = $itemTime.val();
+			const nameValue = $itemName.val();
+			const descriptionValue = $itemDescription.val();
+			const importanceValue = $importanceItem.attr('data-importance');
 
-		$itemTime.on('change', (event) => {
-			localStorage.setItem('date', $(event.target).val());
-		});
-
-		$finishedCheckbox.on('change', (e) => {
-			if ($(e.currentTarget).is(':checked')) {
-				localStorage.setItem('finished', true);
+			if (!timeValue || !nameValue || !descriptionValue) {
+				// eslint-disable-next-line no-alert
+				alert('Bitte alle Felder ausfüllen');
 			} else {
-				localStorage.removeItem('finished');
+				const id = $updateBtn.data('id');
+				notes[id].name = nameValue;
+				notes[id].date = timeValue;
+				notes[id].description = descriptionValue;
+				notes[id].rating = importanceValue;
+
+				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
+
+				//$time.text(timeValue);
+				//$itemTitle.text(nameValue);
+				//$description.text(descriptionValue);
+
+				$appContainer.removeClass('active');
+				$overlay.removeClass('active');
+				this.displayNotes(notes, $notesContainer);
 			}
 		});
 
-		$itemEdit.on('click', () => {
-			$itemName.val(localStorage.getItem(typeNametext));
-			$itemDescription.val(localStorage.getItem('textarea'));
-			$itemTime.val(localStorage.getItem('date'));
+		$finishedCheckbox.on('change', function(e) {
+			if ($(e.currentTarget).is(':checked')) {
+				const index = Number($(this).data('id')) - 1;
+				notes[index].finished = true;
+				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
+			} else {
+				const index = Number($(this).data('id')) - 1;
+				notes[index].finished = false;
+				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
+			}
+		});
+
+		const $itemEdit = $ctx.find(selectors.itemEdit);
+		$itemEdit.on('click', function() {
+			const index = Number($(this).data('id')) - 1;
+
+			$itemName.val(notes[index].name);
+			$itemDescription.val(notes[index].description);
+			$itemTime.val(notes[index].date);
+			$importanceItem.val(notes[index].rating);
 
 			$appContainer.addClass('active');
 			$overlay.addClass('active');
+			$updateBtn.addClass('active');
+			$updateBtn.attr('data-id', index);
+			$updateBtn.addClass('active');
 		});
 
-		this.rate();
-
+		this.rate($importanceSpan);
 		resolve();
 	},
 
-	rate() {
+	rate($importanceSpan) {
 		const importanceValue = $('.js-item-importance').attr('data-importance');
 		if (importanceValue > 0) {
 			this.updateStars(importanceValue);
 		}
-		$(document).on('click', '.js-importance-span', (e) => {
+		$importanceSpan.on('click', (e) => {
 			e.preventDefault();
-
+			const index = Number($(this).data('id')) - 1;
 			const rateValue = $(e.currentTarget).attr('data-value');
 			$(e.currentTarget)
 				.parent()
 				.attr('data-importance', rateValue);
 			this.updateStars(rateValue);
+			$importanceSpan.attr('data-id', index);
 		});
 	},
 
@@ -154,6 +198,64 @@ T.Module.TodoApp = T.createModule({
 			if ($(this).attr('data-value') <= value) {
 				$(this).addClass('active');
 			}
+		});
+	},
+
+	displayNotes(notes, $notesContainer) {
+		$notesContainer.empty();
+		notes.forEach((element) => {
+			let checked = '';
+			if (element.finished) {
+				checked = 'checked';
+			}
+
+			$notesContainer.append(`
+			<div class="todos__item js-todos__item">
+				<div class="item">
+					<div class="item item-time js-time">${element.date}</div>
+					<div class="item item-finished">
+						<input type="checkbox" name="finished" class="js-finished-checkbox" value="" data-id=${element.id} ${checked}>
+						<label for="finished">finished</label>
+					</div>
+				</div>
+				<div class="item">
+					<div class="item item-title js-item-title">${element.name}</div>
+					<div class="item item-description js-description">${element.description}</div>
+				</div>
+				<div class="item">
+					<div class="item item-importance js-importance" data-importance="${element.rating}">
+						<span class="importance-span js-importance-span" name="rating" data-value="5" data-id=${element.id}>
+						</span>
+						<span class="importance-span js-importance-span" name="rating" data-value="4" data-id=${element.id}>
+						</span>
+						<span class="importance-span js-importance-span" name="rating" data-value="3" data-id=${element.id}>
+						</span>
+						<span class="importance-span js-importance-span" name="rating" data-value="2" data-id=${element.id}>
+						</span>
+						<span class="importance-span js-importance-span" name="rating" data-value="1" data-id=${element.id}>
+						</span>
+					</div>
+					<button class="btn item item-edit js-item-edit" data-id="${element.id}">Edit</button>
+				</div>
+			</div>
+			`);
+		});
+		this.ratingStars();
+	},
+
+	ratingStars() {
+		const $importanceContainers = $(selectors.importance);
+
+		$importanceContainers.each((index, importanceContainer) => {
+			$(importanceContainer)
+				.children()
+				.each((index2, element) => {
+					const amountStar = $(importanceContainer).data('importance');
+					const value = $(element).data('value');
+					if (amountStar >= value) {
+						$(element).addClass('active'); // element == this
+					}
+				});
 		});
 	},
 });

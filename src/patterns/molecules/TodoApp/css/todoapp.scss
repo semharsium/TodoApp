@@ -3,6 +3,7 @@
   flex-flow: nowrap column;
   &__header {
     width: 100%;
+    padding-left: 20px;
   }
   &__toolbar {
     display: flex;
@@ -11,6 +12,7 @@
   }
 
 }
+
 .content {
   position: relative;
   display: none;
@@ -33,6 +35,14 @@
   opacity: 0.8;
   display: none;
 }
+
+.submit-btn {
+  display: none;
+}
+.update-btn  {
+  display: none;
+}
+
 .active {
   display: inline-block;
   transform: scale(1);
@@ -91,6 +101,11 @@
   align-items: center;
 }
 
+.todos {
+  padding-left: 20px;
+  background-color: #3a405a;
+}
+
 .item {
   margin-bottom: 20px;
   width: calc(50% - 14px)
@@ -112,4 +127,19 @@
 .btn {
   height: 40px;
   background: #f9dec9;
+}
+.notes__container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: center;
+  padding-left: 20px;
+}
+.notes {
+  height: 91px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid black;
 }
