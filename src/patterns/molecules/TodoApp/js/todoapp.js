@@ -60,6 +60,7 @@ T.Module.TodoApp = T.createModule({
 			$appContainer.addClass('active');
 			$overlay.addClass('active');
 			$submit.addClass('active');
+			$updateBtn.removeClass('active');
 		});
 
 		$closeButton.on('click', () => {
@@ -167,7 +168,7 @@ T.Module.TodoApp = T.createModule({
 			$overlay.addClass('active');
 			$updateBtn.addClass('active');
 			$updateBtn.attr('data-id', index);
-			$updateBtn.addClass('active');
+			$submit.removeClass('active');
 		});
 
 		this.rate($importanceSpan);
