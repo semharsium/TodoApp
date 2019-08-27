@@ -10,135 +10,102 @@
     justify-content: space-between;
     margin-bottom: 20px;
   }
-
-}
-
-.content {
-  position: relative;
-  display: none;
-  width: 250px;
-  padding: 20px;
-  height: auto;
-  justify-content: center;
-  z-index: 1;
-  margin: auto;
-  color: white;
-  background-color: #3a405a;
-  transition: all 0.2s ease-in-out;
-  transform: scale(0.8);
-}
-.overlay {
-  background-color: #0b0b0b;
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  opacity: 0.8;
-  display: none;
-}
-
-.submit-btn {
-  display: none;
-}
-.update-btn  {
-  display: none;
-}
-
-.active {
-  display: inline-block;
-  transform: scale(1);
-}
-
-.todo-item {
-  display: flex;
-  flex-direction: column;
-  width: 209px;
-  margin-bottom: 20px;
-}
-
-.todo__importance {
-  position: relative;
-  margin-bottom: 40px;
-}
-
-.importance-text{
-  position: absolute;
-}
-
-.importance-span {
-  display: inline-block;
-  position: relative;
-  margin-right: 13px;
-}
-
-.importance .importance-span {
-  cursor: pointer;
-}
-
-.importance-span:first-child {
-  margin-right: -15px;
-}
-
-.importance-span::after {
-  content: "\2606";
-  -webkit-font-smoothing: antialiased;
-}
-
-.importance-span.active:before,
-.importance .importance-span:hover:before,
-.importance .importance-span:hover ~ .importance-span:before {
-  position: absolute;
-  content: "\2605";
-  color:#99b2dd;
-  -webkit-font-smoothing: antialiased;
-}
-
-.todos__item {
-  display: flex;
-  flex-flow: raw wrap;
-  margin-bottom: 20px;
-  border-bottom: 1px solid black;
-  align-items: center;
-}
-
-.todos {
-  padding-left: 20px;
-  background-color: #3a405a;
-}
-
-.item {
-  margin-bottom: 20px;
-  width: calc(50% - 14px)
-}
-
-.item-importance {
-  margin-left: 80px;
-  display: flex;
-  flex-direction: row-reverse;
-  margin-top: -21px;
-}
-
-.item.item-importance .importance-span::after {
-  content: '\2605';
-  color: #99b2dd;
-  -webkit-font-smoothing: antialiased;
-  display: none;
-}
-.btn {
-  height: 40px;
-  background: #f9dec9;
-}
-.notes__container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  align-items: center;
-  padding-left: 20px;
-}
-.notes {
-  height: 91px;
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid black;
+  &__content {
+    position: relative;
+    display: none;
+    width: 250px;
+    padding: 20px;
+    height: auto;
+    justify-content: center;
+    z-index: 1;
+    margin: auto;
+    color: white;
+    background-color: #3a405a;
+    transition: all 0.2s ease-in-out;
+    transform: scale(0.8);
+  }
+  &__overlay {
+    background-color: #0b0b0b;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    opacity: 0.8;
+    display: none;
+  }
+  &__button {
+    height: 40px;
+    background: #f9dec9;
+    &-submit,&-update {
+      display: none;
+    }
+  }
+  .active {
+    display: inline-block;
+    transform: scale(1);
+  }
+  &__item {
+    display: flex;
+    flex-direction: column;
+    width: 209px;
+    margin-bottom: 20px;
+    &-rating-container {
+      position: relative;
+      margin-bottom: 40px;
+    }
+  }
+  &__importance-text {
+    position: absolute;
+  }
+  &__importance-rating {
+    display: inline-block;
+    position: relative;
+    margin-right: 13px;
+    cursor: pointer;
+    &:first-child {
+      margin-right: -15px;
+    }
+    &::after {
+      content: "\2606";
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+  &__importance {
+    cursor: pointer;
+    &-rating.active:before,
+    & .m-todo-app__importance-rating:hover:before,
+    & .m-todo-app__importance-rating:hover ~ .m-todo-app__importance-rating:before {
+      position: absolute;
+      content: "\2605";
+      color: #99b2dd;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+  &__notes {
+    display: flex;
+    flex-flow: raw wrap;
+    margin-bottom: 20px;
+    border-bottom: 1px solid black;
+    align-items: center;
+    &-container {
+      padding-left: 20px;
+      background-color: #3a405a;
+    }
+  }
+  &__note,
+  &__button-edit {
+    margin-bottom: 20px;
+    width: calc(50% - 14px);
+  }
+  &__importance-container, &__note-importance-container {
+    margin-left: 80px;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: -21px;
+  }
+  &__note.m-todo-app__note-importance-container .m-todo-app__importance-rating::after {
+    content: "\2605";
+    color: #99b2dd;
+    -webkit-font-smoothing: antialiased;
+    display: none;
+  }
 }

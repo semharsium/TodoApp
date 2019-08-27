@@ -2,52 +2,45 @@
     <div class="m-todo-app__header">
         <div class="m-todo-app__toolbar">
             <div class="m-todo-app__toolbar-button">
-                <button class="btn js-show-create-form">Create new note</button>
+                <button class="m-todo-app__button m-todo-app__button-show-create-form js-m-todo-app__button-show-create-form">Create new note</button>
             </div>
-
         </div>
-        {{!-- <div class="m-todo-app__filter">
-            <button class="btn js-filter" data-filter="byFinish">By finish Date</button>
-            <button class="btn js-filter" data-filter="byCreated">By created Date</button>
-            <button class="btn js-filter" data-filter="byImportance">By Importance</button>
-            <button class="btn js-filter" data-filter="showFinished">Show finished</button>
-        </div> --}}
     </div>
-    <div class="content js-todo-content">
-        <form class="todo__time todo-item">
-            <div class="todo__title todo-item js-odo-item">
-                <input type="text" class="ipt js-item-name" value="" placeholder="Name">
+    <div class="m-todo-app__content js-m-todo-app__content">
+        <form class="m-todo-app__item m-todo-app__item-form">
+            <div class="m-todo-app__item">
+                <input type="text" class="m-todo-app__item-name js-m-todo-app__item-name" value="" placeholder="Name">
             </div>
 
-            <div class="todo__description todo-item">
-                <textarea class="ipt js-item-description" value="" placeholder="Description"></textarea>
+            <div class="m-todo-app__item">
+                <textarea class="m-todo-app__item-description js-m-todo-app__item-description" value="" placeholder="Description"></textarea>
             </div>
 
-            <div class="todo__importance todo-item">
-                <div class="importance-text">Importance:
-                    <div class="importance item-importance js-item-importance">
-                        <span class="importance-span js-importance-span" name="rating" data-value="5">
+            <div class="m-todo-app__item m-todo-app__item-rating-container">
+                <div class="m-todo-app__importance-text">Importance:
+                    <div class="m-todo-app__importance m-todo-app__importance-container js-m-todo-app__importance-container" data-importance="importance">
+                        <span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="5" >
                         </span>
-                        <span class="importance-span js-importance-span" name="rating" data-value="4">
+                        <span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="4" >
                         </span>
-                        <span class="importance-span js-importance-span" name="rating" data-value="3">
+                        <span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="3" >
                         </span>
-                        <span class="importance-span js-importance-span" name="rating" data-value="2">
+                        <span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="2" >
                         </span>
-                        <span class="importance-span js-importance-span" name="rating" data-value="1">
+                        <span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="1" >
                         </span>
                     </div>
                 </div>
             </div>
 
-            <input class="ipt js-item-time" type="date" value="" placeholder="Date">
-            <button class="btn submit-btn js-submit">submit</button>
-            <button class="btn update-btn js-update">update</button>
-            <button class="btn js-close-button">Close</button>
+            <input class="m-todo-app__time js-m-todo-app__time" type="date" value="" placeholder="Date">
+            <button class="m-todo-app__button m-todo-app__button-submit js-m-todo-app__button-submit">submit</button>
+            <button class="m-todo-app__button m-todo-app__button-update js-m-todo-app__button-update">update</button>
+            <button class="m-todo-app__button m-todo-app__button-close js-m-todo-app__button-close">Close</button>
         </form>
 
     </div>
-    <div class="todos js-notes__container">
+    <div class="m-todo-app__notes-container js-m-todo-app__notes-container">
     </div>
-    <div class="overlay js-overlay"></div>
+    <div class="m-todo-app__overlay js-m-todo-app__overlay"></div>
 </div>

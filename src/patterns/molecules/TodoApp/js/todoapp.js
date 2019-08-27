@@ -11,25 +11,25 @@ import $ from 'jquery';
 
 const selectors = {
 	button: '.js-todo-app__button',
-	createFormBtn: '.js-show-create-form',
-	appContainer: '.js-todo-content',
-	overlay: '.js-overlay',
-	closeButton: '.js-close-button',
-	submit: '.js-submit',
-	itemTime: '.js-item-time',
-	time: '.js-time',
-	itemName: '.js-item-name',
-	itemTitle: '.js-item-title',
-	itemDescription: '.js-item-description',
-	description: '.js-description',
-	finishedCheckbox: '.js-finished-checkbox',
-	itemEdit: '.js-item-edit',
-	importanceItem: '.js-item-importance',
-	notesContainer: '.js-notes__container',
-	todosItem: '.js-todos__item',
-	updateBtn: '.js-update',
-	importanceSpan: '.js-importance-span',
-	importance: '.js-importance',
+	createFormBtn: '.js-m-todo-app__button-show-create-form',
+	appContainer: '.js-m-todo-app__content',
+	overlay: '.js-m-todo-app__overlay',
+	closeButton: '.js-m-todo-app__button-close',
+	submit: '.js-m-todo-app__button-submit',
+	itemTime: '.js-m-todo-app__time',
+	time: '.js-m-todo-app__note-time',
+	itemName: '.js-m-todo-app__item-name',
+	itemTitle: '.m-todo-app__note-name',
+	itemDescription: '.js-m-todo-app__item-description',
+	description: '.js-m-todo-app__note-description',
+	finishedCheckbox: '.js-m-todo-app__note-finished-checkbox',
+	itemEdit: '.js-m-todo-app__button-edit',
+	importanceItem: '.js-m-todo-app__importance-container',
+	notesContainer: '.js-m-todo-app__notes-container',
+	notesItem: '.js-m-todo-app__notes',
+	updateBtn: '.js-m-todo-app__button-update',
+	importanceSpan: '.js-m-todo-app__importance-rating',
+	importance: '.js-m-todo-app__note-importance-container',
 };
 // const stateClasses = { disabled: 'state-todo-app--disabled' };
 
@@ -158,11 +158,20 @@ T.Module.TodoApp = T.createModule({
 		const $itemEdit = $ctx.find(selectors.itemEdit);
 		$itemEdit.on('click', function() {
 			const index = Number($(this).data('id')) - 1;
+			localStorage.setItem('notes', JSON.stringify(notes));
 
 			$itemName.val(notes[index].name);
 			$itemDescription.val(notes[index].description);
 			$itemTime.val(notes[index].date);
-			$importanceItem.val(notes[index].rating);
+			$importanceItem.attr('data-importance', notes[index].rating);
+
+			$importanceItem.children().each((index2, element) => {
+				const amountStar = $importanceItem.data('importance');
+				const value = $(element).data('value');
+				if (amountStar >= value) {
+					$(element).addClass('active'); // element == this
+				}
+			});
 
 			$appContainer.addClass('active');
 			$overlay.addClass('active');
@@ -176,7 +185,7 @@ T.Module.TodoApp = T.createModule({
 	},
 
 	rate($importanceSpan) {
-		const importanceValue = $('.js-item-importance').attr('data-importance');
+		const importanceValue = $('.m-todo-app__importance-container').attr('data-importance');
 		if (importanceValue > 0) {
 			this.updateStars(importanceValue);
 		}
@@ -193,7 +202,7 @@ T.Module.TodoApp = T.createModule({
 	},
 
 	updateStars(value = 0) {
-		$('.js-importance-span').each(function() {
+		$('.js-m-todo-app__importance-rating').each(function() {
 			$(this).removeClass('active');
 
 			if ($(this).attr('data-value') <= value) {
@@ -211,32 +220,48 @@ T.Module.TodoApp = T.createModule({
 			}
 
 			$notesContainer.append(`
-			<div class="todos__item js-todos__item">
-				<div class="item">
-					<div class="item item-time js-time">${element.date}</div>
-					<div class="item item-finished">
-						<input type="checkbox" name="finished" class="js-finished-checkbox" value="" data-id=${element.id} ${checked}>
+			<div class="m-todo-app__notes js-m-todo-app__notes">
+				<div class="m-todo-app__note">
+					<div class="m-todo-app__note m-todo-app__note-time js-m-todo-app__note-time">${element.date}</div>
+					<div class="m-todo-app__note m-todo-app__note-finished">
+						<input type="checkbox" name="finished" class="m-todo-app__note-finished-checkbox js-m-todo-app__note-finished-checkbox" value="" data-id=${
+							element.id
+						} ${checked}>
 						<label for="finished">finished</label>
 					</div>
 				</div>
-				<div class="item">
-					<div class="item item-title js-item-title">${element.name}</div>
-					<div class="item item-description js-description">${element.description}</div>
+				<div class="m-todo-app__note">
+					<div class="m-todo-app__note m-todo-app__note-name js-m-todo-app__note-name">${element.name}</div>
+					<div class="m-todo-app__note m-todo-app__note-description js-m-todo-app__note-description">${element.description}</div>
 				</div>
-				<div class="item">
-					<div class="item item-importance js-importance" data-importance="${element.rating}">
-						<span class="importance-span js-importance-span" name="rating" data-value="5" data-id=${element.id}>
+				<div class="m-todo-app__note">
+					<div class="m-todo-app__note m-todo-app__note-importance-container js-m-todo-app__note-importance-container" data-importance="${
+						element.rating
+					}">
+						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="5" data-id=${
+							element.id
+						}>
 						</span>
-						<span class="importance-span js-importance-span" name="rating" data-value="4" data-id=${element.id}>
+						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="4" data-id=${
+							element.id
+						}>
 						</span>
-						<span class="importance-span js-importance-span" name="rating" data-value="3" data-id=${element.id}>
+						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="3" data-id=${
+							element.id
+						}>
 						</span>
-						<span class="importance-span js-importance-span" name="rating" data-value="2" data-id=${element.id}>
+						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="2" data-id=${
+							element.id
+						}>
 						</span>
-						<span class="importance-span js-importance-span" name="rating" data-value="1" data-id=${element.id}>
+						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="1" data-id=${
+							element.id
+						}>
 						</span>
 					</div>
-					<button class="btn item item-edit js-item-edit" data-id="${element.id}">Edit</button>
+					<button class="m-todo-app__button m-todo-app__button-edit js-m-todo-app__button-edit" data-id="${
+						element.id
+					}">Edit</button>
 				</div>
 			</div>
 			`);
