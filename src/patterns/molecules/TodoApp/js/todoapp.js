@@ -57,95 +57,68 @@ T.Module.TodoApp = T.createModule({
 		}
 
 		$createFormBtn.on('click', () => {
-			$appContainer.addClass('active');
-			$overlay.addClass('active');
+			this.openNotebutton($appContainer, $overlay, $('.js-m-todo-app'));
 			$submit.addClass('active');
 			$updateBtn.removeClass('active');
 		});
 
 		$closeButton.on('click', () => {
-			$appContainer.removeClass('active');
-			$overlay.removeClass('active');
+			this.displayContents($appContainer, $overlay);
 		});
 
 		$overlay.on('click', () => {
-			$appContainer.removeClass('active');
-			$overlay.removeClass('active');
+			this.displayContents($appContainer, $overlay);
+			location.reload();
 		});
 
-		//const $time = $ctx.find(selectors.time);
-		//const $itemTitle = $ctx.find(selectors.itemTitle);
-		//const $description = $ctx.find(selectors.description);
-
 		const $finishedCheckbox = $ctx.find(selectors.finishedCheckbox);
-		$submit.on('click', (e) => {
-			e.preventDefault();
+		$submit.on('click', () => {
+			this.gettingValues($itemTime, $itemName, $itemDescription, $importanceItem);
 
-			const nameValue = $itemName.val();
-			const descriptionValue = $itemDescription.val();
-			const importanceValue = $importanceItem.attr('data-importance');
-			const timeValue = $itemTime.val();
-
-			if (!timeValue || !nameValue || !descriptionValue) {
+			if (!this.timeValue || !this.nameValue || !this.descriptionValue) {
 				// eslint-disable-next-line no-alert
 				alert('Bitte alle Felder ausfüllen');
 			} else {
-				//notes[0].name = nameValue;
 				const idCount = localStorage.getItem('idCount');
 				const note = {
 					id: idCount,
-					date: timeValue,
-					description: descriptionValue,
-					name: nameValue,
-					rating: importanceValue,
+					date: this.timeValue,
+					description: this.descriptionValue,
+					name: this.nameValue,
+					rating: this.importanceValue,
 				};
 				localStorage.setItem('idCount', Number(idCount) + 1);
 				notes.push(note); //to add a user to the array
 				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
 
-				//$time.text(timeValue);
-				//$itemTitle.text(nameValue);
-				//$description.text(descriptionValue);
-
-				$appContainer.removeClass('active');
-				$overlay.removeClass('active');
+				this.displayContents($appContainer, $overlay);
 				this.displayNotes(notes, $notesContainer);
 			}
 		});
 
-		$updateBtn.on('click', (e) => {
-			e.preventDefault();
+		$updateBtn.on('click', () => {
+			this.gettingValues($itemTime, $itemName, $itemDescription, $importanceItem);
 
-			const timeValue = $itemTime.val();
-			const nameValue = $itemName.val();
-			const descriptionValue = $itemDescription.val();
-			const importanceValue = $importanceItem.attr('data-importance');
-
-			if (!timeValue || !nameValue || !descriptionValue) {
+			if (!this.timeValue || !this.nameValue || !this.descriptionValue) {
 				// eslint-disable-next-line no-alert
 				alert('Bitte alle Felder ausfüllen');
 			} else {
 				const id = $updateBtn.data('id');
-				notes[id].name = nameValue;
-				notes[id].date = timeValue;
-				notes[id].description = descriptionValue;
-				notes[id].rating = importanceValue;
+				notes[id].name = this.nameValue;
+				notes[id].date = this.timeValue;
+				notes[id].description = this.descriptionValue;
+				notes[id].rating = this.importanceValue;
 
 				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
-
-				//$time.text(timeValue);
-				//$itemTitle.text(nameValue);
-				//$description.text(descriptionValue);
-
-				$appContainer.removeClass('active');
-				$overlay.removeClass('active');
+				this.displayContents($appContainer, $overlay);
 				this.displayNotes(notes, $notesContainer);
 			}
 		});
 
 		$finishedCheckbox.on('change', function(e) {
 			if ($(e.currentTarget).is(':checked')) {
-				const index = Number($(this).data('id')) - 1;
+				const id = $(this).data('id');
+				const index = Number(id) - 1;
 				notes[index].finished = true;
 				localStorage.setItem('notes', JSON.stringify(notes)); //to store the array
 			} else {
@@ -156,8 +129,8 @@ T.Module.TodoApp = T.createModule({
 		});
 
 		const $itemEdit = $ctx.find(selectors.itemEdit);
-		$itemEdit.on('click', function() {
-			const index = Number($(this).data('id')) - 1;
+		$itemEdit.on('click', (e) => {
+			const index = Number($(e.currentTarget).data('id')) - 1;
 			localStorage.setItem('notes', JSON.stringify(notes));
 
 			$itemName.val(notes[index].name);
@@ -173,11 +146,10 @@ T.Module.TodoApp = T.createModule({
 				}
 			});
 
-			$appContainer.addClass('active');
-			$overlay.addClass('active');
+			this.openNotebutton($appContainer, $overlay, $('.js-m-todo-app'));
 			$updateBtn.addClass('active');
-			$updateBtn.attr('data-id', index);
 			$submit.removeClass('active');
+			$updateBtn.attr('data-id', index);
 		});
 
 		this.rate($importanceSpan);
@@ -211,16 +183,36 @@ T.Module.TodoApp = T.createModule({
 		});
 	},
 
+	gettingValues($gettimevalue, $getnamevalue, $getdescriptionvalue, $getratingvalue) {
+		this.timeValue = $gettimevalue.val();
+		this.nameValue = $getnamevalue.val();
+		this.descriptionValue = $getdescriptionvalue.val();
+		this.importanceValue = $getratingvalue.attr('data-importance');
+	},
+
+	openNotebutton($notescontainer, $hidecontent, $wholeapp) {
+		$notescontainer.addClass('active');
+		$hidecontent.addClass('active');
+		$wholeapp.addClass('m-todo-app-noscroll');
+	},
+
+	displayContents($notescontainer, $hidecontent) {
+		$notescontainer.removeClass('active');
+		$hidecontent.removeClass('active');
+	},
+
 	displayNotes(notes, $notesContainer) {
 		$notesContainer.empty();
 		notes.forEach((element) => {
 			let checked = '';
+			let finish = '';
 			if (element.finished) {
 				checked = 'checked';
+				finish = 'm-todo-app__notes-finish';
 			}
 
 			$notesContainer.append(`
-			<div class="m-todo-app__notes js-m-todo-app__notes">
+			<div class="m-todo-app__notes ${finish} js-m-todo-app__notes" id="demo-${element.id} ">
 				<div class="m-todo-app__note">
 					<div class="m-todo-app__note m-todo-app__note-time js-m-todo-app__note-time">${element.date}</div>
 					<div class="m-todo-app__note m-todo-app__note-finished">
@@ -235,26 +227,26 @@ T.Module.TodoApp = T.createModule({
 					<div class="m-todo-app__note m-todo-app__note-description js-m-todo-app__note-description">${element.description}</div>
 				</div>
 				<div class="m-todo-app__note">
-					<div class="m-todo-app__note m-todo-app__note-importance-container js-m-todo-app__note-importance-container" data-importance="${
+					<div class="m-todo-app__note m-todo-app__note-importance-container  js-m-todo-app__note-importance-container" data-importance="${
 						element.rating
 					}">
-						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="5" data-id=${
+						<span class="m-todo-app__importance-rating m-todo-app__importance-rating-stars" name="rating" data-value="5" data-id=${
 							element.id
 						}>
 						</span>
-						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="4" data-id=${
+						<span class="m-todo-app__importance-rating m-todo-app__importance-rating-stars" name="rating" data-value="4" data-id=${
 							element.id
 						}>
 						</span>
-						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="3" data-id=${
+						<span class="m-todo-app__importance-rating m-todo-app__importance-rating-stars" name="rating" data-value="3" data-id=${
 							element.id
 						}>
 						</span>
-						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="2" data-id=${
+						<span class="m-todo-app__importance-rating m-todo-app__importance-rating-stars" name="rating" data-value="2" data-id=${
 							element.id
 						}>
 						</span>
-						<span class="m-todo-app__importance-rating js-m-todo-app__importance-rating" name="rating" data-value="1" data-id=${
+						<span class="m-todo-app__importance-rating m-todo-app__importance-rating-stars" name="rating" data-value="1" data-id=${
 							element.id
 						}>
 						</span>
@@ -266,6 +258,7 @@ T.Module.TodoApp = T.createModule({
 			</div>
 			`);
 		});
+		$('.m-todo-app__notes-finish').appendTo($notesContainer);
 		this.ratingStars();
 	},
 
