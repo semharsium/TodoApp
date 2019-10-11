@@ -58,6 +58,7 @@ T.Module.TodoApp = T.createModule({
 
 		$createFormBtn.on('click', () => {
 			this.openNotebutton($appContainer, $overlay, $('.js-m-todo-app'));
+			this.clearValues($itemTime, $itemName, $itemDescription, $importanceSpan);
 			$submit.addClass('active');
 			$updateBtn.removeClass('active');
 		});
@@ -68,7 +69,6 @@ T.Module.TodoApp = T.createModule({
 
 		$overlay.on('click', () => {
 			this.displayContents($appContainer, $overlay);
-			location.reload();
 		});
 
 		const $finishedCheckbox = $ctx.find(selectors.finishedCheckbox);
@@ -130,26 +130,19 @@ T.Module.TodoApp = T.createModule({
 
 		const $itemEdit = $ctx.find(selectors.itemEdit);
 		$itemEdit.on('click', (e) => {
-			const index = Number($(e.currentTarget).data('id')) - 1;
-			localStorage.setItem('notes', JSON.stringify(notes));
+			const itemIndex = Number($(e.currentTarget).data('id')) - 1;
 
-			$itemName.val(notes[index].name);
-			$itemDescription.val(notes[index].description);
-			$itemTime.val(notes[index].date);
-			$importanceItem.attr('data-importance', notes[index].rating);
+			$itemName.val(notes[itemIndex].name);
+			$itemDescription.val(notes[itemIndex].description);
+			$itemTime.val(notes[itemIndex].date);
+			$importanceItem.attr('data-importance', notes[itemIndex].rating);
+			const amountStar = $importanceItem.attr('data-importance');
 
-			$importanceItem.children().each((index2, element) => {
-				const amountStar = $importanceItem.data('importance');
-				const value = $(element).data('value');
-				if (amountStar >= value) {
-					$(element).addClass('active'); // element == this
-				}
-			});
-
+			this.displayStars($importanceItem, amountStar);
 			this.openNotebutton($appContainer, $overlay, $('.js-m-todo-app'));
 			$updateBtn.addClass('active');
 			$submit.removeClass('active');
-			$updateBtn.attr('data-id', index);
+			$updateBtn.attr('data-id', itemIndex);
 		});
 
 		this.rate($importanceSpan);
@@ -188,6 +181,24 @@ T.Module.TodoApp = T.createModule({
 		this.nameValue = $getnamevalue.val();
 		this.descriptionValue = $getdescriptionvalue.val();
 		this.importanceValue = $getratingvalue.attr('data-importance');
+	},
+
+	clearValues($time, $name, $description, $rating) {
+		$name.val('');
+		$description.val('');
+		$rating.removeClass('active');
+		$time.val('');
+	},
+
+	displayStars($importanceItem, amountStar) {
+		$importanceItem.children().each((index, element) => {
+			const value = $(element).data('value');
+			if (amountStar >= value) {
+				$(element).addClass('active'); // element == this
+			} else {
+				$(element).removeClass('active');
+			}
+		});
 	},
 
 	openNotebutton($notescontainer, $hidecontent, $wholeapp) {
